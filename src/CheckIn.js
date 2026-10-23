@@ -51,6 +51,7 @@ import {
   SLIPS_DATA_PROP_TYPES,
   STAFF_SLIP_TYPES,
   CHECKIN_ACTIONS,
+  CIRCULATION_INTERFACE_VERSION,
 } from './consts';
 
 import styles from './checkin.css';
@@ -64,6 +65,7 @@ class CheckIn extends React.Component {
     stripes: PropTypes.shape({
       timezone: PropTypes.string.isRequired,
       locale: PropTypes.string.isRequired,
+      hasInterface: PropTypes.func,
     }).isRequired,
     intl: PropTypes.shape({
       formatMessage: PropTypes.func.isRequired,
@@ -518,6 +520,7 @@ class CheckIn extends React.Component {
       pristine,
       barcodeRef,
       loading,
+      stripes,
     } = this.props;
 
     const {
@@ -535,6 +538,11 @@ class CheckIn extends React.Component {
       label: formatMessage({ id: `ui-checkin.defaultCheckinAction.${key}` }),
       value: key
     }));
+    // In-house use requires the circulation interface that supports the
+    // corresponding check-in response and override. The fallback keeps the
+    // component usable in isolated contexts where stripes has no interface
+    // resolver (for example, unit tests).
+    const supportsInHouseUse = !stripes.hasInterface || stripes.hasInterface('circulation', CIRCULATION_INTERFACE_VERSION);
 
     return (
       <form onSubmit={handleSubmit}>
@@ -568,6 +576,19 @@ class CheckIn extends React.Component {
                     {hasSubmitErrors && <span className={styles.error}>{submitErrors.checkin}</span>}
                   </Layout>
                 </Col>
+                {supportsInHouseUse && (
+                  <Col xs={3} sm={2}>
+                    <Layout className="marginTopLabelSpacer">
+                      <Field
+                        id="inHouseUseCheckbox"
+                        name="item.inHouseUse"
+                        component={Checkbox}
+                        type="checkbox"
+                        label={<FormattedMessage id="ui-checkin.inHouseUse" />}
+                      />
+                    </Layout>
+                  </Col>
+                )}
                 <Col xs={3} sm={1}>
                   <Layout className="marginTopLabelSpacer">
                     <Button
@@ -578,17 +599,6 @@ class CheckIn extends React.Component {
                     >
                       <FormattedMessage id="ui-checkin.enter" />
                     </Button>
-                  </Layout>
-                </Col>
-                <Col sm={2}>
-                  <Layout className="marginTopLabelSpacer">
-                    <Field
-                      id="inHouseUseCheckbox"
-                      name="item.inHouseUse"
-                      component={Checkbox}
-                      type="checkbox"
-                      label={<FormattedMessage id="ui-checkin.inHouseUse" />}
-                    />
                   </Layout>
                 </Col>
                 {/* <CheckinDateTime> provides two sm={2} columns for a total width of 4 */}

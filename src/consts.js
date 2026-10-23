@@ -129,6 +129,7 @@ export const cancelFeeClaimReturned = {
   TYPE_ACTION: 'Cancelled item returned',
 };
 
+export const CIRCULATION_INTERFACE_VERSION = '15.0';
 export const CIRCULATION_BFF_INVENTORY_INTERFACE_NAME = 'circulation-bff-inventory';
 export const CIRCULATION_BFF_INVENTORY_INTERFACE_VERSION = '1.0';
 export const CIRCULATION_BFF_INVENTORY_INTERFACE_ERROR = `Required okapi interfaces ${CIRCULATION_BFF_INVENTORY_INTERFACE_NAME} v${CIRCULATION_BFF_INVENTORY_INTERFACE_VERSION}`;

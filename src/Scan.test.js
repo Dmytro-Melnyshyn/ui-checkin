@@ -1317,7 +1317,7 @@ describe('Scan', () => {
           });
 
           expect(basicProps.mutator.checkIn.POST).toHaveBeenLastCalledWith(
-            expect.objectContaining({ checkedOutItemInHouseUseOverride: true })
+            expect.objectContaining({ itemOverride: true })
           );
         });
 
