@@ -518,7 +518,11 @@ class CheckIn extends React.Component {
       pristine,
       barcodeRef,
       loading,
+      stripes,
     } = this.props;
+
+    const supportsInHouseUse = typeof stripes.hasInterface !== 'function'
+      || stripes.hasInterface('circulation', '15.0');
 
     const {
       hasSubmitErrors = false,
@@ -568,6 +572,19 @@ class CheckIn extends React.Component {
                     {hasSubmitErrors && <span className={styles.error}>{submitErrors.checkin}</span>}
                   </Layout>
                 </Col>
+                {supportsInHouseUse && (
+                  <Col xs={3} sm={2}>
+                    <Layout className="marginTopLabelSpacer">
+                      <Field
+                        id="inHouseUseCheckbox"
+                        name="item.inHouseUse"
+                        component={Checkbox}
+                        type="checkbox"
+                        label={<FormattedMessage id="ui-checkin.inHouseUse" />}
+                      />
+                    </Layout>
+                  </Col>
+                )}
                 <Col xs={3} sm={1}>
                   <Layout className="marginTopLabelSpacer">
                     <Button
@@ -578,17 +595,6 @@ class CheckIn extends React.Component {
                     >
                       <FormattedMessage id="ui-checkin.enter" />
                     </Button>
-                  </Layout>
-                </Col>
-                <Col sm={2}>
-                  <Layout className="marginTopLabelSpacer">
-                    <Field
-                      id="inHouseUseCheckbox"
-                      name="item.inHouseUse"
-                      component={Checkbox}
-                      type="checkbox"
-                      label={<FormattedMessage id="ui-checkin.inHouseUse" />}
-                    />
                   </Layout>
                 </Col>
                 {/* <CheckinDateTime> provides two sm={2} columns for a total width of 4 */}

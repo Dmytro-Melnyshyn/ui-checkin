@@ -525,7 +525,7 @@ export class Scan extends React.Component {
     }
 
     if (checkedOutItemInHouseUseOverride) {
-      requestData.checkedOutItemInHouseUseOverride = true;
+      requestData.itemOverride = true;
     }
 
     this.setState({ loading: true });
@@ -1207,6 +1207,7 @@ export class Scan extends React.Component {
         checkinDate: '',
         checkinTime: '',
         action: servicePoint?.defaultCheckInActionForUseAtLocation || CHECKIN_ACTIONS.RETURN,
+        inHouseUse: false,
       },
     };
   }
